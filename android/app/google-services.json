@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "640166878352",
+    "project_id": "campus-emargency-services-ui",
+    "storage_bucket": "campus-emargency-services-ui.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640166878352:android:13bbb3c2abf41ca7180c15",
+        "android_client_info": {
+          "package_name": "com.example.campus_emargency_project_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640166878352-e5bnullvigf7n10pmg15ia7l0cabkllj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxYvmMgVfYE2oEW52BsPgVcO6MEAswDtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640166878352-e5bnullvigf7n10pmg15ia7l0cabkllj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
