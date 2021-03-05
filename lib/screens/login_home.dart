@@ -1,9 +1,8 @@
-import 'package:campus_emargency_project_ui/screens/user_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:campus_emargency_project_ui/utils/utils.dart';
-import 'package:campus_emargency_project_ui/screens/user_login_screen.dart';
 import 'user_login_screen.dart';
-import 'admin_screen.dart';
+import 'admin_login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id = 'welcomeScreen';
@@ -39,15 +38,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           SizedBox(
             height: 150.0,
           ),
-          Utils.largeButton('user login', () {
-            Navigator.pushNamed(context,  userScreen.id);
+          Utils.largeLoginButton('user login', () {
+            Navigator.pushNamed(context,  UserLoginScreen.id);
           }),
           SizedBox(
             height: 37.0,
           ),
-          Utils.largeButton('admin login', () {
-            Navigator.pushNamed(context,  adminScreen.id);
-
+          Utils.largeLoginButton('admin login', () {
+            Navigator.pushNamed(context,  AdminLoginScreen.id);
           }),
         ],
       ),

@@ -25,15 +25,13 @@ class Utils{
     );
   }
 
-  static Widget largeButton(String title,Function onPressed) {
+  static Widget largeLoginButton(String title,Function onPressed) {
      return InkWell(
        onTap: onPressed,
        child: Padding(
          padding:    EdgeInsets.symmetric(horizontal: 120.0),
          child: Container(
-
            height: 45.0,
-          // width: 149.0,
            decoration: BoxDecoration(
                color: Color(0xffD0874C),
                borderRadius: BorderRadius.all(Radius.circular(30))),

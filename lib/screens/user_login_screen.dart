@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'admin_screen.dart';
 import 'user_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  static String id = 'LoginScreen';
+class UserLoginScreen extends StatefulWidget {
+  static String id = 'UserLoginScreen';
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _UserLoginScreenState createState() => _UserLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _UserLoginScreenState extends State<UserLoginScreen> {
   bool _passwordVisibleOne = false;
   final _auth = FirebaseAuth.instance;
   String email;
@@ -43,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50.0,
               ),
               Center(
-                child: Utils.welcome_text("LOGIN"),
+                child: Utils.welcome_text("USER LOGIN"),
               ),
               SizedBox(
                 height: 30.0,
@@ -116,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 50.0,
               ),
-              Utils.largeButton('Login', () async {
+              Utils.largeLoginButton('Login', () async {
                 try {
                   // setState(() {
                   //   showSpinner=true;

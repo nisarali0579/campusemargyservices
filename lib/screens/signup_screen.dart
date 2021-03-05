@@ -111,7 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(
               height: 60.0,
             ),
-            Utils.largeButton('Login', () async {
+            Utils.largeLoginButton('Login', () async {
               try {
                 // setState(() {
                 //   showSpinner=true;
@@ -122,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // setState(() {
                   //   showSpinner=false;
                   // });
-                  Navigator.pushNamed(context, LoginScreen.id);
+                  Navigator.pushNamed(context, UserLoginScreen.id);
                 }
               } catch (e) {
                 print(e);
@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(
               height: 10.0,
             ),
-            Utils.largeButton("GO BACK", () {
+            Utils.largeLoginButton("GO BACK", () {
               Navigator.pushNamed(context, WelcomeScreen.id);
             })
           ],

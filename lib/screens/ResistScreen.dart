@@ -27,7 +27,7 @@ class _ResitPasswordState extends State<ResitPassword> {
           // Utils.button('type your email', (){}),
           Center(
             child: Utils.smallButton('Done',(){
-              Navigator.pushNamed(context, LoginScreen.id);
+              Navigator.pushNamed(context, UserLoginScreen.id);
             }),
           )
 

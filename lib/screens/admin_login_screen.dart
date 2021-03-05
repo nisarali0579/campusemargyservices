@@ -1,24 +1,60 @@
-import 'package:campus_emargency_project_ui/screens/ForgetScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_emargency_project_ui/utils/utils.dart';
-import 'package:campus_emargency_project_ui/screens/signup_screen.dart';
 import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'admin_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginScreen extends StatefulWidget {
-  static String id = 'LoginScreen';
+// Future<bool> authenticateUser(User user) async {
+//   QuerySnapshot querySnapshot = await _firestore.collection("users").where("email", isEqualTo: user.email).get();
+//   final List<DocumentSnapshot> docs = querySnapshot.docs;
+//   return docs.length == 0 ? true : false;
+// }
+
+class AdminLoginScreen extends StatefulWidget {
+  static String id = 'AdminLoginScreen';
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _AdminLoginScreenState createState() => _AdminLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
   bool _passwordVisibleOne = false;
   final _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String email;
   String password;
   bool showSpinner = false;
+  GoogleSignIn _googleSignIn = GoogleSignIn();
+  // Future<void> _handleSignIn() async {
+  //   try {
+  //     await _googleSignIn.signIn();
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
+
+  Future<User> signIn() async {
+    try {
+      GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
+      GoogleSignInAuthentication _signInAuthentication =
+      await _signInAccount.authentication;
+
+      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: _signInAuthentication.accessToken,
+          idToken: _signInAuthentication.idToken);
+
+      UserCredential authResult = await _auth.signInWithCredential(credential);
+      final User _user = authResult.user;
+      return _user;
+    } catch (e) {
+      print("Auth methods error");
+      print(e);
+      return null;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,122 +79,75 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50.0,
               ),
               Center(
-                child: Utils.welcome_text("LOGIN"),
+                child: Utils.welcome_text("ADMIN LOGIN"),
               ),
               SizedBox(
                 height: 30.0,
               ),
               Container(
                   child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: TextField(
-                      onChanged: (value){
-                        email = value;
-                      },
-                      decoration: InputDecoration(
-                          hintText: "email",
-                          hintStyle: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey)),
-                    ),
-                  )),
+                padding: EdgeInsets.all(20.0),
+                child: TextField(
+                  onChanged: (value) {
+                    email = value;
+                  },
+                  decoration: InputDecoration(
+                      hintText: "email",
+                      hintStyle: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey)),
+                ),
+              )),
               // Utils.email_text("Email",email),
               SizedBox(
                 height: 1.0,
               ),
               Container(
                   child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: TextField(
-                      onChanged: (value){
-                        password=value;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        // suffix: Icon(Icons.visibility_off),
-
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _passwordVisibleOne
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Colors.pinkAccent,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisibleOne = !_passwordVisibleOne;
-                            });
-                          },
-                        ),
-                      ),
-                      obscureText: _passwordVisibleOne,
-                    ),
-                  )),
-              Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, ForgetPassword.id);
+                padding: EdgeInsets.all(20.0),
+                child: TextField(
+                  onChanged: (value) {
+                    password = value;
                   },
-                  child: Text(
-                    "Forgot Password",
-                    style: TextStyle(
-                        color: Colors.green, fontWeight: FontWeight.bold),
-                    textDirection: TextDirection.rtl,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    hintStyle: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                    // suffix: Icon(Icons.visibility_off),
+
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordVisibleOne
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.pinkAccent,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisibleOne = !_passwordVisibleOne;
+                        });
+                      },
+                    ),
                   ),
+                  obscureText: _passwordVisibleOne,
                 ),
-              ),
+              )),
+
               SizedBox(
                 height: 50.0,
               ),
-              Utils.largeButton('Login', () async {
-                try {
-                  // setState(() {
-                  //   showSpinner=true;
-                  // });
-                  final user = await _auth.createUserWithEmailAndPassword(
-                      email: email, password: password);
-                  if (user != null) {
-                    // setState(() {
-                    //   showSpinner=false;
-                    // });
-                    Navigator.pushNamed(context, adminScreen.id);
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              },),
+              Utils.largeLoginButton("Login", (){
+                signIn();
+               if(signIn() !=null){
+                Navigator.pushNamed(context, adminScreen.id);
+               }
+              }
+              ),
               SizedBox(
                 height: 90.0,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 100.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'New to Spotify?',
-                      style: TextStyle(
-                          fontSize: 15.0, fontWeight: FontWeight.bold),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, SignUpScreen.id);
-                      },
-                      child: Text(
-                        ' Register',
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),

@@ -8,6 +8,7 @@ import 'package:campus_emargency_project_ui/screens/ResistScreen.dart';
 import 'package:campus_emargency_project_ui/screens/admin_screen.dart';
 import 'package:campus_emargency_project_ui/screens/user_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:campus_emargency_project_ui/screens/admin_login_screen.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -23,12 +24,13 @@ class MyApp extends StatelessWidget {
       initialRoute: WelcomeScreen.id,
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
+        UserLoginScreen.id: (context) => UserLoginScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
         ForgetPassword.id: (context) => ForgetPassword(),
         ResitPassword.id: (context) => ResitPassword(),
         adminScreen.id: (context) => adminScreen(),
         userScreen.id: (context) => userScreen(),
+        AdminLoginScreen.id:(context)=>AdminLoginScreen(),
       },
     );
   }

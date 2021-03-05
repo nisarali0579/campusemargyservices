@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "640166878352-001oge4rn74a0b4q4rd25086aej5l6r9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.campus_emargency_project_ui",
+            "certificate_hash": "d5fcd5f825977d80a7d05d0119949e1d4223e986"
+          }
+        },
+        {
           "client_id": "640166878352-e5bnullvigf7n10pmg15ia7l0cabkllj.apps.googleusercontent.com",
           "client_type": 3
         }
