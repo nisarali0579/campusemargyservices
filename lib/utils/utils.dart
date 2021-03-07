@@ -59,6 +59,25 @@ class Utils{
          ));
    }
 
+ static  Padding notifcation() {
+     return Padding(
+       padding:   EdgeInsets.symmetric(horizontal: 30.0),
+       child: Container(
+           child: Material(
+             elevation: 5,
+             child: Padding(
+               padding:
+               const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+               child: SizedBox(
+                 width: 350.0,
+                 height: 60.0,
+                 child: Center(child: Text("Notifcation")),
+               ),
+             ),
+           )),
+     );
+   }
+
   static Widget smallButton(String name,Function onPressed) {
      return FlatButton(
        shape: RoundedRectangleBorder(

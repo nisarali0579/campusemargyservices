@@ -9,6 +9,10 @@ import 'package:campus_emargency_project_ui/screens/admin_screen.dart';
 import 'package:campus_emargency_project_ui/screens/user_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:campus_emargency_project_ui/screens/admin_login_screen.dart';
+import 'package:campus_emargency_project_ui/screens/user_menu_screen.dart';
+import 'package:campus_emargency_project_ui/screens/user_profile_screen.dart';
+import 'package:campus_emargency_project_ui/screens/user_notification_screen.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -31,6 +35,10 @@ class MyApp extends StatelessWidget {
         adminScreen.id: (context) => adminScreen(),
         userScreen.id: (context) => userScreen(),
         AdminLoginScreen.id:(context)=>AdminLoginScreen(),
+        UserMenuScreen.id:(context)=>UserMenuScreen(),
+        userProfileScreen.id:(context)=>userProfileScreen(),
+        userNotificationScreen.id:(context)=>userNotificationScreen(),
+
       },
     );
   }

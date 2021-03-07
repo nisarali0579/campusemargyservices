@@ -5,12 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'admin_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:campus_emargency_project_ui/services/user_management_screen.dart';
 
 // Future<bool> authenticateUser(User user) async {
 //   QuerySnapshot querySnapshot = await _firestore.collection("users").where("email", isEqualTo: user.email).get();
 //   final List<DocumentSnapshot> docs = querySnapshot.docs;
 //   return docs.length == 0 ? true : false;
 // }
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
 
 class AdminLoginScreen extends StatefulWidget {
   static String id = 'AdminLoginScreen';
@@ -21,39 +24,12 @@ class AdminLoginScreen extends StatefulWidget {
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
   bool _passwordVisibleOne = false;
-  final _auth = FirebaseAuth.instance;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String email;
   String password;
   bool showSpinner = false;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
-  // Future<void> _handleSignIn() async {
-  //   try {
-  //     await _googleSignIn.signIn();
-  //   } catch (error) {
-  //     print(error);
-  //   }
-  // }
+  //User user;
 
-  Future<User> signIn() async {
-    try {
-      GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
-      GoogleSignInAuthentication _signInAuthentication =
-      await _signInAccount.authentication;
-
-      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: _signInAuthentication.accessToken,
-          idToken: _signInAuthentication.idToken);
-
-      UserCredential authResult = await _auth.signInWithCredential(credential);
-      final User _user = authResult.user;
-      return _user;
-    } catch (e) {
-      print("Auth methods error");
-      print(e);
-      return null;
-    }
-  }
+  
 
 
   @override
@@ -139,13 +115,41 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               SizedBox(
                 height: 50.0,
               ),
+
+// Utils.largeLoginButton("Login", (){
+//   UserManagement().authorizeAccess;
+// })
+
               Utils.largeLoginButton("Login", (){
-                signIn();
-               if(signIn() !=null){
-                Navigator.pushNamed(context, adminScreen.id);
-               }
+
+                _firestore.collection('admin').doc().get();
+
+                if(email != null && password != null){
+                      () async {
+                    try {
+                      // setState(() {
+                      //   showSpinner=true;
+                      // });
+
+                      final user = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      if (user != null) {
+                        // setState(() {
+                        //   showSpinner=false;
+                        // });
+                        Navigator.pushNamed(context, adminScreen.id);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  };
+                }else{
+
+                }
+
               }
               ),
+
               SizedBox(
                 height: 90.0,
               ),
@@ -156,3 +160,10 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     );
   }
 }
+
+
+// Future<bool> authenticateUser(User user) async {
+//   QuerySnapshot querySnapshot = await _firestore.collection("users").where("email", isEqualTo: user.email).get();
+//   final List<DocumentSnapshot> docs = querySnapshot.docs;
+//   return docs.length == 0 ? true : false;
+// }
