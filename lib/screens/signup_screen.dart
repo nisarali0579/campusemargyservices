@@ -111,7 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(
               height: 60.0,
             ),
-            Utils.largeLoginButton('Login', () async {
+            Utils.largeLoginButton('Rejister', () async {
               try {
                 // setState(() {
                 //   showSpinner=true;
@@ -132,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: 10.0,
             ),
             Utils.largeLoginButton("GO BACK", () {
-              Navigator.pushNamed(context, WelcomeScreen.id);
+              Navigator.pushNamed(context, loginHome.id);
             })
           ],
         ),

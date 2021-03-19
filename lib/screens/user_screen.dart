@@ -3,6 +3,7 @@ import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/Widgets/card_widget_screen.dart';
 import 'user_menu_screen.dart';
 import 'package:campus_emargency_project_ui/services/user_management_screen.dart';
+import 'login_home.dart';
 
 class userScreen extends StatefulWidget {
   static String id = 'userScreen';
@@ -19,17 +20,19 @@ class _userScreenState extends State<userScreen> {
         backgroundColor: Color(0XFFF7F7F7),
         appBar: AppBar(
           actions: [
-            Center(
-                child: Text(
-              "logout",
-              style: TextStyle(fontSize: 20.0),
-            )),
+            // Center(
+            //     child: Text(
+            //   "logout",
+            //   style: TextStyle(fontSize: 20.0),
+            // )),
             IconButton(
                 icon: Icon(
                   Icons.logout,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
-                onPressed: null)
+                onPressed: (){
+                  Navigator.pushNamed(context, loginHome.id);
+                })
           ],
           title: Text('Student Page'),
           backgroundColor: Color(0xffD0874C),

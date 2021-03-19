@@ -4,6 +4,7 @@ import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'user_screen.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class UserLoginScreen extends StatefulWidget {
   static String id = 'UserLoginScreen';
@@ -13,17 +14,23 @@ class UserLoginScreen extends StatefulWidget {
 }
 
 class _UserLoginScreenState extends State<UserLoginScreen> {
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
+
+  //final String email =TextEditingController();
   bool _passwordVisibleOne = false;
   final _auth = FirebaseAuth.instance;
-  String email;
-  String password;
   bool showSpinner = false;
+  String showEmailError = null;
+  String passwordEmailError = null;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
+          body: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        child: Center(
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
@@ -49,19 +56,18 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
               ),
               Container(
                   child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: TextField(
-                      onChanged: (value){
-                        email = value;
-                      },
-                      decoration: InputDecoration(
-                          hintText: "email",
-                          hintStyle: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey)),
-                    ),
-                  )),
+                padding: EdgeInsets.all(20.0),
+                child: TextField(
+                  controller: _email,
+                  decoration: InputDecoration(
+                      hintText: "email",
+                      errorText: showEmailError,
+                      hintStyle: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey)),
+                ),
+              )),
               // Utils.email_text("Email",email),
               SizedBox(
                 height: 1.0,
@@ -70,11 +76,10 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                   child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: TextField(
-                  onChanged: (value){
-                    password=value;
-                  },
+                  controller: _password,
                   decoration: InputDecoration(
-                    hintText: 'Password',
+                    hintText: "Password",
+                    errorText:passwordEmailError ,
                     hintStyle: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
@@ -115,25 +120,44 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
               SizedBox(
                 height: 50.0,
               ),
-              Utils.largeLoginButton('Login', () async {
-                try {
-                  // setState(() {
-                  //   showSpinner=true;
-                  // });
-                  final user = await _auth.signInWithEmailAndPassword(
-                      email: email, password: password);
-                  if (user != null) {
-                    // setState(() {
-                    //   showSpinner=false;
-                    // });
-                    Navigator.pushNamed(context, userScreen.id);
+              // if (email != null && password != null)
+              Utils.largeLoginButton(
+                'Login',
+                () async {
+                  if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+                    try {
+                      setState(() {
+                        showSpinner = true;
+                      });
+                      final user = await _auth.signInWithEmailAndPassword(
+                          email: _email.text, password: _password.text);
+                      if (user != null) {
+                        if (_email != null && _password != null) {
+                          setState(() {
+                            showSpinner = true;
+                          });
+                          Navigator.pushNamed(context, userScreen.id);
+                        } else {
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        }
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  } else {
+                    setState(() {
+                      showEmailError = "Email not be empty";
+                    });
+                    setState(() {
+                      passwordEmailError = "Password not be empty";
+                    });
                   }
-                } catch (e) {
-                  print(e);
-                }
-              },),
+                },
+              ),
               SizedBox(
-                height: 90.0,
+                height: 60.0,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 100.0),
@@ -151,7 +175,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                       child: Text(
                         ' Register',
                         style: TextStyle(
-                            fontSize: 20.0,
+                            fontSize: 15.0,
                             color: Colors.green,
                             fontWeight: FontWeight.bold),
                       ),
@@ -162,7 +186,26 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }
+
+// Utils.largeLoginButton('Login', () async {
+// try {
+// setState(() {
+// showSpinner=true;
+// });
+// final user = await _auth.signInWithEmailAndPassword(
+// email: email, password: password);
+// if (user != null) {
+// setState(() {
+// showSpinner=false;
+// });
+// Navigator.pushNamed(context, userScreen.id);
+// }
+// } catch (e) {
+// print(e);
+// }
+// },
+// ),

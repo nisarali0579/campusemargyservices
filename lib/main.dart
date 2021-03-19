@@ -25,9 +25,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //home: WelcomeScreen(),
-      initialRoute: WelcomeScreen.id,
+      initialRoute: loginHome.id,
       routes: {
-        WelcomeScreen.id: (context) => WelcomeScreen(),
+        loginHome.id: (context) => loginHome(),
         UserLoginScreen.id: (context) => UserLoginScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
         ForgetPassword.id: (context) => ForgetPassword(),

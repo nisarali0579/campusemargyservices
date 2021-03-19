@@ -19,8 +19,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           SizedBox(height: 50.0,),
           Center(child: Icon(Icons.lock)),
           SizedBox(height: 80.0,),
-          Text("Forget Your",style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold,color: Colors.green),),
-          Text("Password",style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold,color: Colors.green),),
+         Column(mainAxisAlignment: MainAxisAlignment.center,
+           children: [
+           Text("Forget Your",style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold,color: Colors.green),),
+           Text("Password",style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold,color: Colors.green),),
+         ],),
           SizedBox(height: 50.0,),
           Utils.email_text('Email'),
           SizedBox(height: 10.0,),

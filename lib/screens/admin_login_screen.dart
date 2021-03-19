@@ -163,7 +163,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
 
 // Future<bool> authenticateUser(User user) async {
-//   QuerySnapshot querySnapshot = await _firestore.collection("users").where("email", isEqualTo: user.email).get();
+//   QuerySnapshot querySnapshot = await _firestore.collection("admin").where("email", isEqualTo: user.email).get();
 //   final List<DocumentSnapshot> docs = querySnapshot.docs;
 //   return docs.length == 0 ? true : false;
 // }

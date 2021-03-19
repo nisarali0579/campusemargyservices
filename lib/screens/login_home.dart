@@ -4,13 +4,13 @@ import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'user_login_screen.dart';
 import 'admin_login_screen.dart';
 
-class WelcomeScreen extends StatefulWidget {
+class loginHome extends StatefulWidget {
   static String id = 'welcomeScreen';
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _loginHomeState createState() => _loginHomeState();
 }
 // Utils utils = Utils();
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _loginHomeState extends State<loginHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(
