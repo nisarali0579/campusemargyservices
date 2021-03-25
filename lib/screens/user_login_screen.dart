@@ -4,7 +4,7 @@ import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'user_screen.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+
 
 class UserLoginScreen extends StatefulWidget {
   static String id = 'UserLoginScreen';
@@ -12,7 +12,6 @@ class UserLoginScreen extends StatefulWidget {
   @override
   _UserLoginScreenState createState() => _UserLoginScreenState();
 }
-
 class _UserLoginScreenState extends State<UserLoginScreen> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
@@ -20,17 +19,49 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
   //final String email =TextEditingController();
   bool _passwordVisibleOne = false;
   final _auth = FirebaseAuth.instance;
+
   bool showSpinner = false;
+
   String showEmailError = null;
-  String passwordEmailError = null;
+  String showPasswordError = null;
+
+  @override
+  void initState() {
+    _email.addListener(_emailControllerListener);
+    _password.addListener(_passwordControllerListener);
+    super.initState();
+  }
+  void _emailControllerListener() {
+    showEmailError = _email.text.isNotEmpty ? null : "Email Must not be empty";
+    setState(() {
+    });
+  }
+  void _passwordControllerListener() {
+    showPasswordError = _password.text.isNotEmpty ? null : "Password Must not be empty";
+    setState(() {
+    });
+  }
+  @override
+  void dispose() {
+    _email.removeListener(_emailControllerListener);
+    _password.removeListener(_passwordControllerListener);
+    super.dispose();
+  }
+  void displayError() {
+    setState(() {
+      showEmailError = _email.text.isEmpty ? "Email Must not be empty" : null;
+      showPasswordError = _password.text.isEmpty ? "Password Must not be empty" : null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Center(
+          body:
+        //   ModalProgressHUD(
+        // inAsyncCall: showSpinner,
+        Center(
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
@@ -59,6 +90,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                 padding: EdgeInsets.all(20.0),
                 child: TextField(
                   controller: _email,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                       hintText: "email",
                       errorText: showEmailError,
@@ -79,7 +111,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                   controller: _password,
                   decoration: InputDecoration(
                     hintText: "Password",
-                    errorText:passwordEmailError ,
+                    errorText:showPasswordError ,
                     hintStyle: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
@@ -126,33 +158,31 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                 () async {
                   if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
                     try {
-                      setState(() {
-                        showSpinner = true;
-                      });
+                      // setState(() {
+                      //   showSpinner = true;
+                      // });
                       final user = await _auth.signInWithEmailAndPassword(
                           email: _email.text, password: _password.text);
                       if (user != null) {
                         if (_email != null && _password != null) {
-                          setState(() {
-                            showSpinner = true;
-                          });
+                          // setState(() {
+                          //   showSpinner = true;
+                          // });
                           Navigator.pushNamed(context, userScreen.id);
                         } else {
-                          setState(() {
-                            showSpinner = false;
-                          });
+                          // setState(() {
+                          //   showSpinner = false;
+                          // });
                         }
                       }
                     } catch (e) {
                       print(e);
                     }
-                  } else {
-                    setState(() {
-                      showEmailError = "Email not be empty";
-                    });
-                    setState(() {
-                      passwordEmailError = "Password not be empty";
-                    });
+                  } else
+                    {
+                   setState(() {
+                     displayError();
+                   });
                   }
                 },
               ),
@@ -186,7 +216,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
             ],
           ),
         ),
-      )),
+      )
     );
   }
 }

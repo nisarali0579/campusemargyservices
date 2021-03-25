@@ -1,169 +1,218 @@
-import 'package:flutter/cupertino.dart';
+import 'package:campus_emargency_project_ui/screens/ForgetScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_emargency_project_ui/utils/utils.dart';
+import 'package:campus_emargency_project_ui/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'admin_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:campus_emargency_project_ui/services/user_management_screen.dart';
+import 'user_screen.dart';
 
-// Future<bool> authenticateUser(User user) async {
-//   QuerySnapshot querySnapshot = await _firestore.collection("users").where("email", isEqualTo: user.email).get();
-//   final List<DocumentSnapshot> docs = querySnapshot.docs;
-//   return docs.length == 0 ? true : false;
-// }
-FirebaseFirestore _firestore = FirebaseFirestore.instance;
-final _auth = FirebaseAuth.instance;
 
 class AdminLoginScreen extends StatefulWidget {
   static String id = 'AdminLoginScreen';
 
   @override
-  _AdminLoginScreenState createState() => _AdminLoginScreenState();
+  _UserLoginScreenState createState() => _UserLoginScreenState();
 }
+class _UserLoginScreenState extends State<AdminLoginScreen> {
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
 
-class _AdminLoginScreenState extends State<AdminLoginScreen> {
+  //final String email =TextEditingController();
   bool _passwordVisibleOne = false;
-  String email;
-  String password;
+  final _auth = FirebaseAuth.instance;
+
   bool showSpinner = false;
-  //User user;
 
-  
+  String showEmailError = null;
+  String showPasswordError = null;
 
+  @override
+  void initState() {
+    _email.addListener(_emailControllerListener);
+    _password.addListener(_passwordControllerListener);
+    super.initState();
+  }
+  void _emailControllerListener() {
+    showEmailError = _email.text.isNotEmpty ? null : "Email Must not be empty";
+    setState(() {
+    });
+  }
+  void _passwordControllerListener() {
+    showPasswordError = _password.text.isNotEmpty ? null : "Password Must not be empty";
+    setState(() {
+    });
+  }
+  @override
+  void dispose() {
+    _email.removeListener(_emailControllerListener);
+    _password.removeListener(_passwordControllerListener);
+    super.dispose();
+  }
+  void displayError() {
+    setState(() {
+      showEmailError = _email.text.isEmpty ? "Email Must not be empty" : null;
+      showPasswordError = _password.text.isEmpty ? "Password Must not be empty" : null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Center(
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              SizedBox(
-                height: 17.0,
-              ),
-              Container(
-                //  padding: EdgeInsets.only(top: 17.0, left: 137, right: 154, bottom: 775),
-                child: Image.asset(
-                  'images/logo.png',
-                  height: 134,
-                  width: 137,
+        child: Scaffold(
+          body:
+          //   ModalProgressHUD(
+          // inAsyncCall: showSpinner,
+          Center(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: [
+                SizedBox(
+                  height: 17.0,
                 ),
-              ),
-              SizedBox(
-                height: 50.0,
-              ),
-              Center(
-                child: Utils.welcome_text("ADMIN LOGIN"),
-              ),
-              SizedBox(
-                height: 30.0,
-              ),
-              Container(
-                  child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: TextField(
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "email",
-                      hintStyle: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey)),
+                Container(
+                  //  padding: EdgeInsets.only(top: 17.0, left: 137, right: 154, bottom: 775),
+                  child: Image.asset(
+                    'images/logo.png',
+                    height: 134,
+                    width: 137,
+                  ),
                 ),
-              )),
-              // Utils.email_text("Email",email),
-              SizedBox(
-                height: 1.0,
-              ),
-              Container(
-                  child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: TextField(
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    hintStyle: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
-                    // suffix: Icon(Icons.visibility_off),
-
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _passwordVisibleOne
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.pinkAccent,
+                SizedBox(
+                  height: 50.0,
+                ),
+                Center(
+                  child: Utils.welcome_text("USER LOGIN"),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: TextField(
+                        controller: _email,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            hintText: "email",
+                            errorText: showEmailError,
+                            hintStyle: TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey)),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisibleOne = !_passwordVisibleOne;
-                        });
-                      },
+                    )),
+                // Utils.email_text("Email",email),
+                SizedBox(
+                  height: 1.0,
+                ),
+                Container(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: TextField(
+                        controller: _password,
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          errorText:showPasswordError ,
+                          hintStyle: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          // suffix: Icon(Icons.visibility_off),
+
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisibleOne
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.pinkAccent,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisibleOne = !_passwordVisibleOne;
+                              });
+                            },
+                          ),
+                        ),
+                        obscureText: _passwordVisibleOne,
+                      ),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, ForgetPassword.id);
+                    },
+                    child: Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold),
+                      textDirection: TextDirection.rtl,
                     ),
                   ),
-                  obscureText: _passwordVisibleOne,
                 ),
-              )),
-
-              SizedBox(
-                height: 50.0,
-              ),
-
-// Utils.largeLoginButton("Login", (){
-//   UserManagement().authorizeAccess;
-// })
-
-              Utils.largeLoginButton("Login", (){
-
-                _firestore.collection('admin').doc().get();
-
-                if(email != null && password != null){
+                SizedBox(
+                  height: 50.0,
+                ),
+                // if (email != null && password != null)
+                Utils.largeLoginButton(
+                  'Login',
                       () async {
-                    try {
-                      // setState(() {
-                      //   showSpinner=true;
-                      // });
-
-                      final user = await _auth.signInWithEmailAndPassword(
-                          email: email, password: password);
-                      if (user != null) {
+                    if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+                      try {
                         // setState(() {
-                        //   showSpinner=false;
+                        //   showSpinner = true;
                         // });
-                        Navigator.pushNamed(context, adminScreen.id);
+                        final user = await _auth.signInWithEmailAndPassword(
+                            email: _email.text, password: _password.text);
+                        if (user != null) {
+                          if (_email != null && _password != null) {
+                            // setState(() {
+                            //   showSpinner = true;
+                            // });
+                            Navigator.pushNamed(context, adminScreen.id);
+                          } else {
+                            // setState(() {
+                            //   showSpinner = false;
+                            // });
+                          }
+                        }
+                      } catch (e) {
+                        print(e);
                       }
-                    } catch (e) {
-                      print(e);
+                    } else
+                    {
+                      setState(() {
+                        displayError();
+                      });
                     }
-                  };
-                }else{
-
-                }
-
-              }
-              ),
-
-              SizedBox(
-                height: 90.0,
-              ),
-            ],
+                  },
+                ),
+                SizedBox(
+                  height: 60.0,
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        )
     );
   }
 }
 
-
-// Future<bool> authenticateUser(User user) async {
-//   QuerySnapshot querySnapshot = await _firestore.collection("admin").where("email", isEqualTo: user.email).get();
-//   final List<DocumentSnapshot> docs = querySnapshot.docs;
-//   return docs.length == 0 ? true : false;
+// Utils.largeLoginButton('Login', () async {
+// try {
+// setState(() {
+// showSpinner=true;
+// });
+// final user = await _auth.signInWithEmailAndPassword(
+// email: email, password: password);
+// if (user != null) {
+// setState(() {
+// showSpinner=false;
+// });
+// Navigator.pushNamed(context, userScreen.id);
 // }
+// } catch (e) {
+// print(e);
+// }
+// },
+// ),

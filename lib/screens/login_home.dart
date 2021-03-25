@@ -30,7 +30,7 @@ class _loginHomeState extends State<loginHome> {
             ),
           ),
           SizedBox(
-            height: 93.0,
+            height: 30.0,
           ),
           Center(
             child: Utils.welcome_text("LOGIN"),
