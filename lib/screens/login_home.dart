@@ -14,7 +14,7 @@ class _loginHomeState extends State<loginHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SafeArea(
-      child: Column(
+      child: ListView(
         children: [
           SizedBox(
             height: 17.0,

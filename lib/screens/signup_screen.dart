@@ -1,4 +1,5 @@
 import 'package:campus_emargency_project_ui/screens/login_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/screens/user_login_screen.dart';
@@ -13,11 +14,26 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   bool _passwordVisibleOne = false;
   String email;
   String password;
-  String name;
+  String userName;
+  User loggedUser;
   bool showSpinner = false;
+
+  initState(){
+    super.initState();
+    getCurrentUser();
+  }
+  getCurrentUser()async{
+   final user = await _auth.currentUser;
+   if(user!=null){
+     loggedUser=user;
+   }
+   print(loggedUser.email);
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -50,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.all(20.0),
                   child: TextField(
                     onChanged: (value){
-                      name = value;
+                      userName = value;
                     },
                     decoration: InputDecoration(
                         hintText: 'User Name',
@@ -116,6 +132,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // setState(() {
                 //   showSpinner=true;
                 // });
+                _firestore.collection('messages').add({
+                  'text':userName,
+                  'sender':email,
+                });
                 final user = await _auth.createUserWithEmailAndPassword(
                     email: email, password: password);
                 if (user != null) {

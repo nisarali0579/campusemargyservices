@@ -3,15 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/Widgets/card_widget_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login_home.dart';
+
+FirebaseAuth _auth = FirebaseAuth.instance;
 
 class adminScreen extends StatefulWidget {
   static String id = 'adminScreen';
+
 
   @override
   _adminScreenState createState() => _adminScreenState();
 }
 
 class _adminScreenState extends State<adminScreen> {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  //String notification;
+final notification =TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -51,6 +60,7 @@ class _adminScreenState extends State<adminScreen> {
                           width: 350.0,
                           height: 100.0,
                           child: TextField(
+                          controller: notification,
                             style: TextStyle(fontSize: 20.0),
                             maxLines: 10,
                             decoration: InputDecoration(
@@ -66,7 +76,30 @@ class _adminScreenState extends State<adminScreen> {
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
-                    child: Utils.smallButton('Send', () {}),
+                    child: Utils.smallButton('Send', () async{
+                    await  _firestore.collection('adminNotification').add({
+                        'notification':notification.text,
+                      });
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context){
+                        return AlertDialog(
+                          title: Text("Admin"),
+                          content: Text("Notification Send Succesfully"),
+                          actions:[
+                            FlatButton(
+                              child: Text("Close"),
+                              onPressed: (){
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                      print("send click");
+                    }),
                   ),
                 ],
               ),
@@ -85,7 +118,11 @@ class _adminScreenState extends State<adminScreen> {
                     SizedBox(
                       width: 20.0,
                     ),
-                    Cards(icon: Icon(Icons.logout),name: "Logout",onPressed: (){},),
+                    Cards(icon: Icon(Icons.logout),name: "Logout",onPressed: (){
+                      _auth.signOut();
+                      print("signout");
+                      Navigator.pushNamed(context, loginHome.id);
+                    },),
                     SizedBox(
                       width: 20.0,
                     )

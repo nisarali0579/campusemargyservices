@@ -12,6 +12,7 @@ import 'package:campus_emargency_project_ui/screens/admin_login_screen.dart';
 import 'package:campus_emargency_project_ui/screens/user_menu_screen.dart';
 import 'package:campus_emargency_project_ui/screens/user_profile_screen.dart';
 import 'package:campus_emargency_project_ui/screens/user_notification_screen.dart';
+import 'package:campus_emargency_project_ui/screens/welcome_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +26,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //home: WelcomeScreen(),
-      initialRoute: loginHome.id,
+      initialRoute: WellComeScreen.id,
       routes: {
+        WellComeScreen.id: (context) => WellComeScreen(),
         loginHome.id: (context) => loginHome(),
         UserLoginScreen.id: (context) => UserLoginScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),

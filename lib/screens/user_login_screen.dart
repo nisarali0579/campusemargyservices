@@ -4,6 +4,10 @@ import 'package:campus_emargency_project_ui/utils/utils.dart';
 import 'package:campus_emargency_project_ui/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'user_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
 class UserLoginScreen extends StatefulWidget {
@@ -199,7 +203,8 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                           fontSize: 15.0, fontWeight: FontWeight.bold),
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async{
+                        await  _firestore.collection('userEmailPassword').add({'email':_email.text,'password':_password.text});
                         Navigator.pushNamed(context, SignUpScreen.id);
                       },
                       child: Text(

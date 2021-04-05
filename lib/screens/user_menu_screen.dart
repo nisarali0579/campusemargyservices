@@ -16,7 +16,8 @@ class _UserMenuScreenState extends State<UserMenuScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
+      home:
+      Scaffold(
         body: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
